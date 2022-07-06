@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Imports;
 
 use App\Http\Controllers\Controller;
-use App\Imports\PokemonImport;
 use App\Jobs\Imports\ImportPokemonJob;
 use App\Models\Imports\ImportPokemon;
 use Illuminate\Http\JsonResponse;
@@ -11,13 +10,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
+/**
+ * @group Import
+ */
 class ImportPokemonController extends Controller
 {
     /**
-     * Display a listing of the pokemon imports.
+     * Display the last 10 pokemon imports.
      *
      * @return JsonResponse
      */
@@ -39,7 +39,7 @@ class ImportPokemonController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'file' => ['required', 'file']
+            'file' => ['required', 'file', 'mimes:csv']
         ]);
 
         DB::transaction(function () use ($validated) {
@@ -58,6 +58,6 @@ class ImportPokemonController extends Controller
             ImportPokemonJob::dispatch($import);
         });
 
-        return $this->success(message: 'File is being imported');
+        return $this->success(message: __('misc.file_importing'));
     }
 }

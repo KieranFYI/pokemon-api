@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Authentication\APITokenController;
 use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\Authentication\RegistrationController;
 use App\Http\Controllers\Imports\ImportPokemonController;
 use App\Http\Controllers\Pokemon\PokemonController;
+use App\Http\Controllers\Pokemon\PokemonTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,15 +33,24 @@ Route::prefix('auth')
 
 Route::middleware('auth:sanctum')
     ->group(function () {
-    Route::get('user', function (Request $request) {
-        return $request->user();
-    });
+        Route::get('user', function (Request $request) {
+            return $request->user();
+        });
 
-    Route::resource('pokemon', PokemonController::class, ['except' => ['create', 'edit']]);
+        Route::post('auth/token', [APITokenController::class, 'store'])
+            ->name('authentication.token');
 
-    Route::prefix('imports')
-        ->group(function() {
-            Route::get('pokemon', [ImportPokemonController::class, 'index']);
-            Route::post('pokemon', [ImportPokemonController::class, 'store']);
+        Route::resource('pokemon/type', PokemonTypeController::class, ['except' => ['create', 'edit']]);
+
+        Route::get('pokemon/filters', [PokemonController::class, 'filters'])
+            ->name('pokemon.filters');
+        Route::resource('pokemon', PokemonController::class, ['except' => ['create', 'edit']]);
+
+        Route::prefix('imports')
+            ->group(function () {
+                Route::get('pokemon', [ImportPokemonController::class, 'index'])
+                    ->name('import.pokemon.index');
+                Route::post('pokemon', [ImportPokemonController::class, 'store'])
+                    ->name('import.pokemon.store');
+            });
     });
-});

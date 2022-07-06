@@ -7,6 +7,7 @@ use App\Models\Users\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class RegistrationController extends Controller
@@ -19,8 +20,16 @@ class RegistrationController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required'],
-            'email' => ['required', 'email', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Password::min(8)],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique(User::class)
+            ],
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(8)
+            ],
         ]);
 
         $user = new User([

@@ -33,3 +33,7 @@ public/assets/
 .styleci.yml
 .idea
 .idea/*
+
+.scribe
+resources/views/scribe/index.blade.php
+public/docs
