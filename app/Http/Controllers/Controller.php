@@ -15,11 +15,11 @@ class Controller extends BaseController
     use ValidatesRequests;
 
     /**
-     * @param array $data
+     * @param mixed $data
      * @param string|null $message
      * @return JsonResponse
      */
-    public function success(array $data = [], string $message = null): JsonResponse
+    public function success(mixed $data = null, string $message = null): JsonResponse
     {
         return response()->json([
             'success' => true,
@@ -29,12 +29,12 @@ class Controller extends BaseController
     }
 
     /**
-     * @param array $data
+     * @param mixed $data
      * @param string|null $message
      * @param int $status
      * @return JsonResponse
      */
-    public function error(array $data = [], string $message = null, int $status = 401): JsonResponse
+    public function error(mixed $data = null, string $message = null, int $status = 401): JsonResponse
     {
         return response()->json([
             'success' => false,

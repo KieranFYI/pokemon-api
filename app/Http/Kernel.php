@@ -76,7 +76,6 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             SubstituteBindings::class,
             ForceJsonResponse::class,
@@ -101,5 +100,6 @@ class Kernel extends HttpKernel
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
+        'stateful' => EnsureFrontendRequestsAreStateful::class,
     ];
 }
